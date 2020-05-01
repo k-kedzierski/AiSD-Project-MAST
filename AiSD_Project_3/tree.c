@@ -96,6 +96,39 @@ void tree_get_definition( tree_t* tree ) {
     }
 }
 
+void tree_fill_nodes( tree_t* tree ) {
+    tree->nodes = (node_t**)malloc( tree->node_count * sizeof(node_t) );
+    node_t* current = tree->root;
+    
+    // Initialize nodes lookup
+    for( int_fast32_t i = 0; i < tree->node_count; i++ ) {
+        tree->nodes[i] = NULL;
+    }
+    
+    // Fill nodes lookup bottom-up
+    while (tree->nodes[tree->root->number] == NULL) {
+        
+        // Go to unassigned child
+        if(     current->child != NULL
+           &&   current->child != tree->nodes[current->child->number]) {
+            current = current->child;
+        }
+        
+        // Else, proceed to right and go to unassigned sibling
+        else if(    current->sibling != NULL
+                &&  current->sibling != tree->nodes[current->sibling->number]) {
+            current = current->sibling;
+        }
+        
+        // Else, assign to nodes lookup
+        else {
+            tree->nodes[current->number] = current;
+            // ...and go back to parent
+            current = current->parent;
+        }
+    }
+}
+
 tree_t* tree_scan() {
     tree_t* return_tree = tree_init();
     
@@ -104,6 +137,9 @@ tree_t* tree_scan() {
     
     // Label inner nodes
     tree_label_inner_nodes(return_tree);
+    
+    // Fill nodes lookup
+    tree_fill_nodes(return_tree);
     
     return return_tree;
 }

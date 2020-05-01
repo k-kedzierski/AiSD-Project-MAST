@@ -38,6 +38,8 @@ void tree_label_inner_nodes( tree_t* tree );
 
 void tree_get_definition( tree_t* tree );
 
+void tree_fill_nodes( tree_t* tree );
+
 tree_t* tree_scan( void );
 
 #endif /* tree_h */
