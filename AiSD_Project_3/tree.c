@@ -27,7 +27,7 @@ void tree_label_inner_nodes( tree_t* tree ) {
     int_fast32_t    label = tree->leaf_count;
     
     // Labeling using indexes from leaf count up to node count - bottom-up approach
-    while (label <= tree->node_count) {
+    while (label < tree->node_count) {
         
         // Go to unlabeled child
         if( current->child != NULL && current->number == UNDEFINED) {
@@ -72,23 +72,24 @@ void tree_get_definition( tree_t* tree ) {
             case ',':
                 // Add sibling and move current position
                 node_add_sibling(current);
-                // Decrement leaf for 0...n-1 indexes
-                if( current->number != UNDEFINED ) current->number--;
                 current = current->sibling;
                 tree->node_count++;
                 break;
             case ';':
                 tree->root = current;
+                tree->node_count++;
                 return;
             default:
                 // Modify leaf value
                 if( current->number == UNDEFINED ) {
-                    current->number = (int)(c - 48);
+                    // Decrement leaf for 0...n-1 indexes
+                    current->number = (int)(c - 48 - 1);
                     tree->leaf_count++;
                 }
                 else {
+                    current->number += 1;
                     current->number *= 10;
-                    current->number += (int)(c - 48);
+                    current->number += (int)(c - 48 - 1);
                 }
                 break;
         }
