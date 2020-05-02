@@ -11,6 +11,8 @@
 
 #define UNDEFINED -1
 
+#define _DEBUG
+
 #ifdef _DEBUG
   #define _DEBUG_PRINTF(...) fprintf(stderr, __VA_ARGS__ );
 #else
