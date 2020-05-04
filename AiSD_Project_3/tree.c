@@ -12,7 +12,7 @@
 // Functions definitions
 // ===
 
-tree_t* tree_init( void ) {
+tree_t* tree_init() {
     tree_t* return_tree = (tree_t*)malloc( sizeof(tree_t ));
     
     return_tree-> root = NULL;
@@ -137,7 +137,7 @@ void tree_fill_nodes( tree_t* tree ) {
     }
 }
 
-tree_t* tree_scan( void ) {
+tree_t* tree_scan() {
     tree_t* return_tree = tree_init();
     
     // Get tree definition

@@ -11,12 +11,12 @@
 
 #define UNDEFINED -1
 
-// #define DEBUG
+// #define _DEBUG
 
-#ifdef DEBUG
-  #define DEBUG_PRINTF(...) fprintf(stderr, __VA_ARGS__ );
+#ifdef _DEBUG
+  #define _DEBUG_PRINTF(...) fprintf(stderr, __VA_ARGS__ );
 #else
-  #define DEBUG_PRINTF(...)
+  #define _DEBUG_PRINTF(...)
 #endif
 
 #endif /* misc_h */

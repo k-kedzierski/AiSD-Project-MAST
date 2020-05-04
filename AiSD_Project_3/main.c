@@ -22,7 +22,7 @@
 
 int main() {
     
-    DEBUG_PRINTF("Debug stream initialized\n");
+    _DEBUG_PRINTF("Debug stream initialized\n");
     
     int_fast32_t tree_set_size;
     
