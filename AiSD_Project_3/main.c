@@ -22,7 +22,7 @@
 
 int main() {
     
-    _DEBUG_PRINTF("Debug stream initialized\n");
+    DEBUG_PRINTF("Debug stream initialized\n");
     
     int_fast32_t tree_set_size;
     
@@ -33,10 +33,17 @@ int main() {
         tree_set[i] = tree_scan();
     }
     
+    // Compute all n(n-1)/2 input trees comparisons
     for( int_fast32_t i = 0; i < tree_set_size; i++ ) {
         for( int_fast32_t j = i + 1; j < tree_set_size; j++ ) {
             printf("%" SCNdFAST32 "\n", tree_set[i]->leaf_count - mast(tree_set[i], tree_set[j]));
         }
     }
+    
+    // Free dynamically allocated memory
+    for( int_fast32_t i = 0; i < tree_set_size; i++ )
+        tree_free(tree_set[i]);
+    free(tree_set);
+    
     return 0;
 }

@@ -34,6 +34,8 @@ typedef struct {
 
 tree_t* tree_init( void );
 
+void tree_free( tree_t* tree );
+
 void tree_label_inner_nodes( tree_t* tree );
 
 void tree_get_definition( tree_t* tree );

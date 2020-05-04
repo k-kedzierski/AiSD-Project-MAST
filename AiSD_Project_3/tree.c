@@ -12,7 +12,7 @@
 // Functions definitions
 // ===
 
-tree_t* tree_init() {
+tree_t* tree_init( void ) {
     tree_t* return_tree = (tree_t*)malloc( sizeof(tree_t ));
     
     return_tree-> root = NULL;
@@ -20,6 +20,14 @@ tree_t* tree_init() {
     return_tree->node_count = 0;
     
     return return_tree;
+}
+
+void tree_free( tree_t* tree ) {
+    for( int_fast32_t i = 0; i < tree->node_count; i++ )
+        free(tree->nodes[i]);
+    
+    free(tree->nodes);
+    free(tree);
 }
 
 void tree_label_inner_nodes( tree_t* tree ) {
@@ -129,7 +137,7 @@ void tree_fill_nodes( tree_t* tree ) {
     }
 }
 
-tree_t* tree_scan() {
+tree_t* tree_scan( void ) {
     tree_t* return_tree = tree_init();
     
     // Get tree definition

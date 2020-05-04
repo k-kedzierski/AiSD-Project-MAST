@@ -12,73 +12,73 @@
 // Functions definitions
 // ===
 
-void _DEBUG_PRINT_LOOKUP( mast_t* mast_thd ) {
+void DEBUG_PRINT_LOOKUP( mast_t* mast_thd ) {
     int_fast32_t i, j;
     
     // Print lookup table - only when _DEBUG is defined in misc.h
-    _DEBUG_PRINTF("╔════╦");
+    DEBUG_PRINTF("╔════╦");
     for( i = 0; i < mast_thd->t2->node_count; i++ )
-        _DEBUG_PRINTF("════");
-    _DEBUG_PRINTF("═╗\n");
+        DEBUG_PRINTF("════");
+    DEBUG_PRINTF("═╗\n");
     
-    _DEBUG_PRINTF("║    ║");
+    DEBUG_PRINTF("║    ║");
     // Label 1st dimension
     for( i = 0; i < mast_thd->t2->node_count; i++ )
-        _DEBUG_PRINTF("%4d", i);
-    _DEBUG_PRINTF(" ║\n");
+        DEBUG_PRINTF("%4d", i);
+    DEBUG_PRINTF(" ║\n");
     
-    _DEBUG_PRINTF("╠════╬");
+    DEBUG_PRINTF("╠════╬");
     for( i = 0; i < mast_thd->t2->node_count; i++ )
-        _DEBUG_PRINTF("════");
-    _DEBUG_PRINTF("═╣\n");
+        DEBUG_PRINTF("════");
+    DEBUG_PRINTF("═╣\n");
     
     for( i = 0; i < mast_thd->t1->node_count; i++ ) {
         // Label 2nd dimension
-        _DEBUG_PRINTF("║" "%4d" "║", i);
+        DEBUG_PRINTF("║" "%4d" "║", i);
         for( j = 0; j < mast_thd->t2->node_count; j++ ) {
-            _DEBUG_PRINTF("%4d", MAST_LOOKUP(mast_thd, i, j));
+            DEBUG_PRINTF("%4d", MAST_LOOKUP(mast_thd, i, j));
         }
-        _DEBUG_PRINTF(" ║\n");
+        DEBUG_PRINTF(" ║\n");
         if( i == mast_thd->t1->node_count - 1 ) break;
-        _DEBUG_PRINTF("║    ║" "%*c" " ║\n", 4 * mast_thd->t2->node_count, ' ');
+        DEBUG_PRINTF("║    ║" "%*c" " ║\n", 4 * mast_thd->t2->node_count, ' ');
     }
     
-    _DEBUG_PRINTF("╚════╩");
+    DEBUG_PRINTF("╚════╩");
     for( i = 0; i < mast_thd->t2->node_count; i++ )
-        _DEBUG_PRINTF("════");
-    _DEBUG_PRINTF("═╝\n");
+        DEBUG_PRINTF("════");
+    DEBUG_PRINTF("═╝\n");
     
 }
 
-void _DEBUG_PRINT_MATRIX( match_t* match_thd, node_t* node1, node_t* node2 ) {
+void DEBUG_PRINT_MATRIX( match_t* match_thd, node_t* node1, node_t* node2 ) {
     int_fast32_t i, j;
     node_t* current_1;
     node_t* current_2;
     
-    _DEBUG_PRINTF("╔════╦");
+    DEBUG_PRINTF("╔════╦");
     for( i = 0; i < match_thd->size[1]; i++ )
-        _DEBUG_PRINTF("════");
-    _DEBUG_PRINTF("═╗\n");
+        DEBUG_PRINTF("════");
+    DEBUG_PRINTF("═╗\n");
     
-    _DEBUG_PRINTF("║    ║");
+    DEBUG_PRINTF("║    ║");
     // Label 1st dimension
     if(match_thd->swapped) {
         for( current_1 = node1->child, i = 0;
         current_1 != NULL;
         current_1 = current_1-> sibling, i++ )
-            _DEBUG_PRINTF("%4d", current_1->number);
+            DEBUG_PRINTF("%4d", current_1->number);
     } else {
         for( current_2 = node2->child, j = 0;
         current_2 != NULL;
         current_2 = current_2->sibling, j++ )
-             _DEBUG_PRINTF("%4d", current_2->number);
+             DEBUG_PRINTF("%4d", current_2->number);
     }
-    _DEBUG_PRINTF(" ║\n");
+    DEBUG_PRINTF(" ║\n");
     
-    _DEBUG_PRINTF("╠════╬");
+    DEBUG_PRINTF("╠════╬");
     for( i = 0; i < match_thd->size[1]; i++ )
-        _DEBUG_PRINTF("════");
-    _DEBUG_PRINTF("═╣\n");
+        DEBUG_PRINTF("════");
+    DEBUG_PRINTF("═╣\n");
     
     if(match_thd->swapped)
         current_2 = node2->child;
@@ -88,20 +88,20 @@ void _DEBUG_PRINT_MATRIX( match_t* match_thd, node_t* node1, node_t* node2 ) {
     for( i = 0; i < match_thd->size[0]; i++ ) {
         // Label 2nd dimension
         
-        _DEBUG_PRINTF("║" "%4d" "║", current_2->number);
+        DEBUG_PRINTF("║" "%4d" "║", current_2->number);
         current_2 = current_2->sibling;
         for( j = 0; j < match_thd->size[1]; j++ ) {
-            _DEBUG_PRINTF("%4d", MATCH_LOOKUP(match_thd, i, j));
+            DEBUG_PRINTF("%4d", MATCH_LOOKUP(match_thd, i, j));
         }
-        _DEBUG_PRINTF(" ║\n");
+        DEBUG_PRINTF(" ║\n");
         if( i == match_thd->size[0] - 1 ) break;
-        _DEBUG_PRINTF("║    ║" "%*c" " ║\n", 4 * match_thd->size[1], ' ');
+        DEBUG_PRINTF("║    ║" "%*c" " ║\n", 4 * match_thd->size[1], ' ');
     }
     
-    _DEBUG_PRINTF("╚════╩");
+    DEBUG_PRINTF("╚════╩");
     for( i = 0; i < match_thd->size[1]; i++ )
-        _DEBUG_PRINTF("════");
-    _DEBUG_PRINTF("═╝\n");
+        DEBUG_PRINTF("════");
+    DEBUG_PRINTF("═╝\n");
     
     
 }
@@ -114,7 +114,7 @@ match_t* match_init( int_fast32_t size_y, int_fast32_t size_x ) {
     if( size_x < size_y ) {
         // Swap rows with collumns
         return_match->swapped = true;
-        _DEBUG_PRINTF("Swapping rows and collumns...\n")
+        DEBUG_PRINTF("Swapping rows and collumns...\n")
         
         return_match->size[0] = size_x;
         return_match->size[1] = size_y;
@@ -138,6 +138,12 @@ match_t* match_init( int_fast32_t size_y, int_fast32_t size_x ) {
     return return_match;
 }
 
+void match_free( match_t* match_thd ) {
+    free(match_thd->match_matrix);
+    free(match_thd->banned);
+    free(match_thd);
+}
+
 void match_opt_sum( match_t* match_thd, int_fast32_t current_row, int_fast32_t* return_value, int_fast32_t sum ) {
     // This algorithm works only when number of collumns >= number of rows
     for( int_fast32_t col = 0; col < match_thd->size[1]; col++ ) {
@@ -145,7 +151,7 @@ void match_opt_sum( match_t* match_thd, int_fast32_t current_row, int_fast32_t* 
             continue;
         }
         
-        if( current_row < match_thd->size[0] - 1) {
+        if( current_row < (match_thd->size[0] - 1) ) {
             match_thd->banned[col] = true;
             match_opt_sum(match_thd, current_row + 1, return_value, sum + MATCH_LOOKUP(match_thd, current_row, col));
             match_thd->banned[col] = false;
@@ -153,10 +159,11 @@ void match_opt_sum( match_t* match_thd, int_fast32_t current_row, int_fast32_t* 
             *return_value = sum + MATCH_LOOKUP(match_thd, current_row, col);
         }
     }
+    return;
 }
 
 int_fast32_t match_eval_matrix( mast_t* mast_thd, node_t* node1, node_t* node2 ) {
-    _DEBUG_PRINTF("Called mast(%d,%d)\n",node1->number,node2->number);
+    DEBUG_PRINTF("Called mast(%d,%d)\n",node1->number,node2->number);
     match_t*        match_thd = match_init(node_count_children(node1), node_count_children(node2));
     int_fast32_t    return_value = 0;
     
@@ -187,19 +194,22 @@ int_fast32_t match_eval_matrix( mast_t* mast_thd, node_t* node1, node_t* node2 )
     }
     
     // Print match matrix to debug stream
-    _DEBUG_PRINT_MATRIX(match_thd, node1, node2);
+    DEBUG_PRINT_MATRIX(match_thd, node1, node2);
     
     // Find max sum
     match_opt_sum(match_thd, 0, &return_value, 0);
     
+    // Free dynamically allocated memory
+    match_free(match_thd);
+    
     // Print current state
-    _DEBUG_PRINTF("Max matrix sum for mast(%d,%d) = %d\n",node1->number,node2->number,return_value);
+    DEBUG_PRINTF("Max matrix sum for mast(%d,%d) = %d\n",node1->number,node2->number,return_value);
     
-    
+    // Return
     return return_value;
 }
 
-mast_t* mast_init( tree_t const* t1, tree_t const* t2 ) {
+mast_t* mast_init( tree_t* t1, tree_t* t2 ) {
     mast_t* return_mast = (mast_t*)malloc( sizeof(mast_t) );
     
     return_mast->t1 = t1;
@@ -215,6 +225,11 @@ mast_t* mast_init( tree_t const* t1, tree_t const* t2 ) {
         return_mast->lookup[i] = UNDEFINED;
     
     return return_mast;
+}
+
+void mast_free( mast_t* mast_thd ) {
+    free(mast_thd->lookup);
+    free(mast_thd);
 }
 
 void mast_eval_leaves( mast_t* mast_thd ) {
@@ -295,8 +310,8 @@ int_fast32_t mast_eval_nodes( mast_t* mast_thd, node_t* node1, node_t* node2 ) {
     MAST_LOOKUP(mast_thd, node1->number, node2->number) = max;
     
     // Print lookup array to debug stream
-    _DEBUG_PRINTF("Calling debug lookup...\n");
-    _DEBUG_PRINT_LOOKUP(mast_thd);
+    DEBUG_PRINTF("Calling debug lookup...\n");
+    DEBUG_PRINT_LOOKUP(mast_thd);
     
     return max;
 }
@@ -316,13 +331,19 @@ int_fast32_t mast_get_opt( mast_t* mast_thd ) {
     return mast_get_lookup(mast_thd, mast_thd->t1->root, mast_thd->t2->root);
 }
 
-int_fast32_t mast( tree_t const* t1, tree_t const* t2 ) {
+int_fast32_t mast( tree_t* t1, tree_t* t2 ) {
     mast_t* mast_thd = mast_init(t1,t2);
     
     // Evaluate MAST for leaves
     mast_eval_leaves(mast_thd);
     
-    // Return optimal value
-    return mast_get_opt(mast_thd);
+    // Find optimal value
+    int_fast32_t return_value = mast_get_opt(mast_thd);
+    
+    // Free dynamically allocated memory
+    mast_free(mast_thd);
+    
+    // Return
+    return return_value;
     
 }
