@@ -5,7 +5,7 @@
 //  Created by Kacper Kędzierski on 02/05/2020.
 //  Copyright © 2020 Kacper Kędzierski. All rights reserved.
 //
-
+#pragma once
 #ifndef mast_h
 #define mast_h
 
@@ -20,26 +20,46 @@
 
 #define MAST_LOOKUP(MAST_THD, I, J) ( (MAST_THD)->lookup[((I)*((MAST_THD)->t2->node_count))+(J)] )
 
+#define MATCH_LOOKUP(MATCH, I, J) ( (MATCH)->match_matrix[((I)*((MATCH)->size[1]))+(J)] )
+
 // ===
 // Data Structures
 // ===
 
 typedef struct {
-    int_fast32_t* lookup;
-    int_fast32_t lookup_size;
-    tree_t const* t1;
-    tree_t const* t2;
+    int_fast32_t*   match_matrix;
+    int_fast32_t    size[2];
+    int_fast32_t*   label[2];
+    bool            swapped;
+    bool*           banned;
+} match_t;
+
+typedef struct {
+    int_fast32_t*   lookup;
+    int_fast32_t    lookup_size;
+    tree_t const*   t1;
+    tree_t const*   t2;
 } mast_t;
 
 // ===
 // Functions declarations
 // ===
 
-void _DEBUG_PRINT_LOOKUP( mast_t* mast_thd );
+match_t* match_init( int_fast32_t size_x, int_fast32_t size_y );
+
+void match_opt_sum( match_t* match_thd, int_fast32_t current_row, int_fast32_t* return_value, int_fast32_t sum );
+
+int_fast32_t match_eval_matrix( mast_t* mast_thd, node_t* node1, node_t* node2 );
 
 mast_t* mast_init( tree_t const* t1, tree_t const* t2 );
 
 void mast_eval_leaves( mast_t* mast_thd );
+
+int_fast32_t mast_eval_nodes( mast_t* mast_thd, node_t* node1, node_t* node2 );
+
+int_fast32_t mast_get_lookup( mast_t* mast_thd, node_t* node1, node_t* node2 );
+
+int_fast32_t mast_get_opt( mast_t* mast_thd );
 
 int_fast32_t mast( tree_t const* t1, tree_t const* t2 );
 

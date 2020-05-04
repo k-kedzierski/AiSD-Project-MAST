@@ -37,4 +37,6 @@ void node_add_child( node_t* parent );
 
 void node_add_sibling( node_t* child );
 
+int_fast32_t node_count_children( node_t* parent );
+
 #endif /* node_h */

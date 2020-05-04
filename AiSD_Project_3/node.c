@@ -34,3 +34,15 @@ void node_add_sibling( node_t* child ) {
     sibling->parent = child->parent;
     child->sibling = sibling;
 }
+
+int_fast32_t node_count_children( node_t* parent ) {
+    int_fast32_t    return_value = 0;
+    node_t*         current = parent->child;
+    
+    while(current != NULL) {
+        return_value++;
+        current = current->sibling;
+    }
+    
+    return return_value;
+}
