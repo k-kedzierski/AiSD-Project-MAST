@@ -30,7 +30,7 @@ typedef struct {
     int_fast32_t*   match_matrix;
     int_fast32_t    size[2];
     bool            swapped;
-    bool*           banned;
+    int*           banned;
 } match_t;
 
 typedef struct {

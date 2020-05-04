@@ -127,10 +127,10 @@ match_t* match_init( int_fast32_t size_y, int_fast32_t size_x ) {
     }
     
     // Initialize banned rows array
-    return_match->banned = (bool*)malloc( return_match->size[0] * sizeof(bool) );
+    return_match->banned = (int*)malloc( return_match->size[1] * sizeof(int) );
     
-    for( int_fast32_t i = 0; i < return_match->size[0]; i++ )
-        return_match->banned[i] = false;
+    for( int_fast32_t i = 0; i < return_match->size[1]; i++ )
+        return_match->banned[i] = 0;
     
     // Match matrix is in row-major order
     return_match->match_matrix = (int_fast32_t*)malloc( size_x * size_y * sizeof(int_fast32_t) );
@@ -152,11 +152,11 @@ void match_opt_sum( match_t* match_thd, int_fast32_t current_row, int_fast32_t* 
         }
         
         if( current_row < (match_thd->size[0] - 1) ) {
-            match_thd->banned[col] = true;
-            match_opt_sum(match_thd, current_row + 1, return_value, sum + MATCH_LOOKUP(match_thd, current_row, col));
-            match_thd->banned[col] = false;
-        } else if( sum + MATCH_LOOKUP(match_thd, current_row, col) > *return_value) {
-            *return_value = sum + MATCH_LOOKUP(match_thd, current_row, col);
+            match_thd->banned[col] = 1;
+            match_opt_sum(match_thd, current_row + 1, return_value, (sum + MATCH_LOOKUP(match_thd, current_row, col)));
+            match_thd->banned[col] = 0;
+        } else if( (sum + MATCH_LOOKUP(match_thd, current_row, col)) > *return_value) {
+            *return_value = (sum + MATCH_LOOKUP(match_thd, current_row, col));
         }
     }
     return;
@@ -174,6 +174,7 @@ int_fast32_t match_eval_matrix( mast_t* mast_thd, node_t* node1, node_t* node2 )
     
     // Check if matrix was swapped
     if(match_thd->swapped) {
+        /*
         for( current_1 = node2->child, i = 0;
             current_1 != NULL;
             current_1 = current_1-> sibling, i++ )
@@ -181,9 +182,27 @@ int_fast32_t match_eval_matrix( mast_t* mast_thd, node_t* node1, node_t* node2 )
                 current_2 != NULL;
                 current_2 = current_2->sibling, j++ )
                 MATCH_LOOKUP(match_thd, i, j) = mast_get_lookup(mast_thd, current_2, current_1);
+         */
+        
+        current_1 = node2->child;
+        i = 0;
+        do {
+            current_2 = node1->child;
+            j = 0;
+            do {
+                MATCH_LOOKUP(match_thd, i, j) = mast_get_lookup(mast_thd, current_2, current_1);
+                current_2 = current_2->sibling;
+                j++;
+            }
+            while(current_2 != NULL);
+            current_1 = current_1->sibling;
+            i++;
+        }
+        while(current_1 != NULL);
         
     }
     else {
+        /*
         for( current_1 = node1->child, i = 0;
             current_1 != NULL;
             current_1 = current_1-> sibling, i++ )
@@ -191,6 +210,23 @@ int_fast32_t match_eval_matrix( mast_t* mast_thd, node_t* node1, node_t* node2 )
                 current_2 != NULL;
                 current_2 = current_2->sibling, j++ )
                 MATCH_LOOKUP(match_thd, i, j) = mast_get_lookup(mast_thd, current_1, current_2);
+         */
+        current_1 = node1->child;
+        i = 0;
+        do {
+            current_2 = node2->child;
+            j = 0;
+            do {
+                MATCH_LOOKUP(match_thd, i, j) = mast_get_lookup(mast_thd, current_1, current_2);
+                current_2 = current_2->sibling;
+                j++;
+            }
+            while(current_2 != NULL);
+            current_1 = current_1->sibling;
+            i++;
+        }
+        while(current_1 != NULL);
+        
     }
     
     // Print match matrix to debug stream
